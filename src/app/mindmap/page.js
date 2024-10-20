@@ -93,7 +93,7 @@ const MarkmapPage = () => {
       svg.setAttribute('viewBox', `${xOffset} ${yOffset} ${viewBoxWidth} ${viewBoxHeight}`);
       setScale(scale); // Set the scale state to reflect the initial zoom
     }
-  }, [markdown]);
+  }, [markdown, scale]);
 
   // Toolbar controls
   const zoomIn = () => {
