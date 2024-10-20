@@ -11,13 +11,22 @@ export default function Page({ params }: { params: { topic: string } }) {
   )
 }
 
-
-// Step 2: Define generateStaticParams
-export function generateStaticParams() {
-  // Define your static topics here (replace with your actual topics)
-  const topics = ['javascript', 'react', 'nextjs']; // Example topics
-
-  return topics.map((topic) => ({
+export async function generateStaticParams() {
+  // Static topics
+  const staticTopics = ['javascript', 'react', 'nextjs', 'mindmap', 'git'];
+  return staticTopics.map((topic) => ({
     topic, // Maps to the `[topic]` dynamic route parameter
+  }));
+
+
+  // Fetch additional dynamic topics from an API
+  const res = await fetch('https://your-api.com/topics');
+  const dynamicTopics = await res.json();
+
+  // Combine static and dynamic topics
+  const allTopics = [...staticTopics, ...dynamicTopics];
+
+  return allTopics.map((topic: string) => ({
+    topic,
   }));
 }
