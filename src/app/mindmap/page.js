@@ -48,6 +48,12 @@ const MarkmapPage = () => {
       const transformer = new Transformer();
       const { root } = transformer.transform(markdown);
       Markmap.create(svgRef.current, {}, root);
+
+      // Set initial zoom level
+      const initialScale = 2; // Adjust this to control initial zoom level
+      const svg = svgRef.current;
+      svg.setAttribute('viewBox', `0 0 ${1000 / initialScale} ${1000 / initialScale}`);
+      setScale(initialScale); // Set the scale state to reflect the initial zoom
     }
   }, [markdown]);
 
