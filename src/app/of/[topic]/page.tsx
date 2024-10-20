@@ -11,7 +11,7 @@ export default function Page({ params }: { params: { topic: string } }) {
   )
 }
 
-/*
+
 // Step 2: Define generateStaticParams
 export function generateStaticParams() {
   // Define your static topics here (replace with your actual topics)
@@ -21,4 +21,3 @@ export function generateStaticParams() {
     topic, // Maps to the `[topic]` dynamic route parameter
   }));
 }
-  */
