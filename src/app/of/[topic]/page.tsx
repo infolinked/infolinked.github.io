@@ -1,13 +1,14 @@
+import Container from "@/components/container";
 import TopicDetail from "./TopicDetail";
 
 export default function Page({ params }: { params: { topic: string } }) {
   return (
-      <div>
+      <Container>
           <div className="flex justify-center mb-10">
               <h1 className="text-4xl font-extrabold text-center">{params?.topic.toUpperCase()}</h1>
           </div>
-          <TopicDetail />
-      </div>
+          <TopicDetail params={params}/>
+      </Container>
   )
 }
 

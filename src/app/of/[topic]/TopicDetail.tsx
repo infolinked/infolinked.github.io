@@ -63,10 +63,18 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
 }
 
 
+const fetchInitValue = async () => {
+  debugger;
+  // Simulate fetching from an API or file
+  const response = await fetch('https://raw.githubusercontent.com/aungthuoo/apis/refs/heads/main/mindmaps/nextjs/understanding-nextjs/index.md'); // Replace with your actual API endpoint
+  const data = await response.text(); // Assuming the API returns plain text (markdown content)
+  debugger; 
+  return data;
+};
 
-export default function TopicDetail() {
+export default function TopicDetail({ params }: { params: { topic: string } }) {
 
-  const [value] = useState(initValue);
+  const [value, setValue] = useState(initValue);
   const refSvg = useRef<SVGSVGElement | null>(null);
   const refMm = useRef<Markmap>();
   const refToolbar = useRef<HTMLDivElement | null>(null);
@@ -86,6 +94,17 @@ export default function TopicDetail() {
     renderToolbar(refMm.current, refToolbar.current);
   }, [refSvg.current]);
 
+
+  useEffect(() => {
+    // Fetch the initial value dynamically
+    const loadData = async () => {
+      const fetchedValue = await fetchInitValue();
+      setValue(fetchedValue);
+    };
+    loadData();
+  }, []);
+
+
   useEffect(() => {
     const mm = refMm.current;
     if (!mm) return;
@@ -100,6 +119,7 @@ export default function TopicDetail() {
 
   return (
     <div className="flex-container">
+      { params.topic }
       <svg className="flex-svg" ref={refSvg} />
       <div className="toolbar-wrapper" ref={refToolbar}></div>
     </div>
