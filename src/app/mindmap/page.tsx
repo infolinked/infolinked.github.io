@@ -63,16 +63,19 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
 }
 
 export default function MarkmapHooks() {
-  const [value, setValue] = useState(initValue);
-  const refSvg = useRef<SVGSVGElement>();
+  const [value] = useState(initValue);
+  const refSvg = useRef<SVGSVGElement | null>(null);
   const refMm = useRef<Markmap>();
-  const refToolbar = useRef<HTMLDivElement>();
+  const refToolbar = useRef<HTMLDivElement | null>(null);
 
+  
   useEffect(() => {
     if (refMm.current) return;
+    
+    if (!refSvg.current || !refToolbar.current) return;
     const mm = Markmap.create(refSvg.current, {
-      colorFreezeLevel: 2,
-      collapsed: false,
+      //colorFreezeLevel: 2,
+      //collapsed: false,
       nodeMinHeight: 30,
       initialExpandLevel: 3// Ensure no animation during rendering
     });
@@ -88,9 +91,9 @@ export default function MarkmapHooks() {
     mm.fit();
   }, [refMm.current, value]);
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setValue(e.target.value);
+  // };
 
   return (
     <div className="flex-container">
