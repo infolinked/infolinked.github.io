@@ -7,24 +7,48 @@ import { Markmap } from 'markmap-view';
 // Fetch markdown content (this will still happen server-side)
 async function fetchMarkdown() {
   const markdown = `
----
-title: Next.js with MongoDB Cloud
-markmap: 
-  colorFreezeLevel: 2 
-  collapsed: false
-  nodeMinHeight: 30
-  initialExpandLevel: 2
----
-
 ## Topics
-- Web Development
-  - React
-  - Next.js
-  - Markmap
-- Backend Development
-  - Node.js
-  - Databases
-- DevOps
+- Sample code 
+
+- Links
+
+  - [Website](https://markmap.js.org/)
+  - [GitHub](https://github.com/gera2ld/markmap)
+
+- Related Projects
+
+  - [coc-markmap](https://github.com/gera2ld/coc-markmap) for Neovim
+  - [markmap-vscode](https://marketplace.visualstudio.com/items?itemName=gera2ld.markmap-vscode) for VSCode
+  - [eaf-markmap](https://github.com/emacs-eaf/eaf-markmap) for Emacs
+
+- Features
+
+  - Note that if blocks and lists appear at the same level, the lists will be ignored.
+
+- Lists
+
+  - **strong** ~~del~~ *italic* ==highlight==
+  - inline code
+  - [x] checkbox
+  - Katex: $x = {-b \pm \sqrt{b^2-4ac} \over 2a}$ <!-- markmap: fold -->
+    - [More Katex Examples](#?d=gist:af76a4c245b302206b16aec503dbe07b:katex.md)
+  - Now we can wrap very very very very long text based on maxWidth option
+  - Ordered list
+    1. item 1
+    2. item 2
+
+- Blocks
+
+
+  - console.log('hello, JavaScript')
+
+
+  - | Products | Price |
+    |-|-|
+    | Apple | 4 |
+    | Banana | 2 |
+
+    ![](/favicon.png)
   `;
   return markdown;
 }
@@ -32,7 +56,7 @@ markmap:
 const MarkmapPage = () => {
   const svgRef = useRef(null);
   const [markdown, setMarkdown] = useState('');
-  const [scale, setScale] = useState(1); // State to keep track of zoom level
+  const [scale, setScale] = useState(1.2); // State to keep track of zoom level
 
   useEffect(() => {
     const fetchAndSetMarkdown = async () => {
@@ -47,13 +71,27 @@ const MarkmapPage = () => {
     if (markdown && svgRef.current) {
       const transformer = new Transformer();
       const { root } = transformer.transform(markdown);
-      Markmap.create(svgRef.current, {}, root);
 
-      // Set initial zoom level
-      const initialScale = 2; // Adjust this to control initial zoom level
+      // Create the Markmap and pass the SVG element
+      const markmap = Markmap.create(svgRef.current, {
+        colorFreezeLevel: 2,
+        collapsed: false,
+        nodeMinHeight: 30,
+        initialExpandLevel: 2,
+      }, root);
+
+      // Set initial zoom and align center
       const svg = svgRef.current;
-      svg.setAttribute('viewBox', `0 0 ${1000 / initialScale} ${1000 / initialScale}`);
-      setScale(initialScale); // Set the scale state to reflect the initial zoom
+      const { width, height } = svg.getBoundingClientRect(); // Get SVG container size
+      const viewBoxWidth = width / scale;
+      const viewBoxHeight = height / scale;
+
+      // Center the viewBox by adjusting its x and y positions
+      const xOffset = (width - viewBoxWidth) / 2;
+      const yOffset = (height - viewBoxHeight) / 2;
+      
+      svg.setAttribute('viewBox', `${xOffset} ${yOffset} ${viewBoxWidth} ${viewBoxHeight}`);
+      setScale(scale); // Set the scale state to reflect the initial zoom
     }
   }, [markdown]);
 
@@ -89,12 +127,12 @@ const MarkmapPage = () => {
   return (
     <div>
       <h1>Markmap with Control Bar</h1>
-      <div style={{ marginBottom: '10px' }}>
+      <div style={{ marginBottom: '10px', textAlign: 'center' }}>
         <button onClick={zoomIn}>Zoom In</button>
         <button onClick={zoomOut}>Zoom Out</button>
         <button onClick={resetView}>Reset View</button>
       </div>
-      <svg ref={svgRef} width="100%" height="600px" viewBox="0 0 1000 1000"></svg>
+      <svg style={{ marginTop: '60px' }} ref={svgRef} width="100%" height="600px" viewBox="0 0 1000 1000"></svg>
     </div>
   );
 };

@@ -7,14 +7,6 @@ import { Markmap } from 'markmap-view';
 // Fetch markdown content (this will still happen server-side)
 async function fetchMarkdown() {
   const markdown = `
----
-title: Next.js with MongoDB Cloud
-markmap: 
-  colorFreezeLevel: 2 
-  collapsed: false
-  nodeMinHeight: 30
-  initialExpandLevel: 2
----
 
 ## Topics
 - Web Development
@@ -32,7 +24,7 @@ markmap:
 const MarkmapPage = () => {
   const svgRef = useRef(null);
   const [markdown, setMarkdown] = useState('');
-  const [scale, setScale] = useState(1); // State to keep track of zoom level
+  const [scale, setScale] = useState(2.0); // State to keep track of zoom level
 
   useEffect(() => {
     const fetchAndSetMarkdown = async () => {
@@ -47,7 +39,18 @@ const MarkmapPage = () => {
     if (markdown && svgRef.current) {
       const transformer = new Transformer();
       const { root } = transformer.transform(markdown);
-      Markmap.create(svgRef.current, {}, root);
+      Markmap.create(svgRef.current, {
+        colorFreezeLevel: 2,
+        collapsed: false,
+        nodeMinHeight: 30,
+        initialExpandLevel: 2
+      }, root);
+
+      // Set initial zoom level
+      //const initialScale = 2; // Adjust this to control initial zoom level
+      const svg = svgRef.current;
+      svg.setAttribute('viewBox', `0 0 ${1000 / scale} ${1000 / scale}`);
+      setScale(scale); // Set the scale state to reflect the initial zoom
     }
   }, [markdown]);
 
@@ -83,7 +86,7 @@ const MarkmapPage = () => {
   return (
     <div>
       <h1>Markmap with Control Bar</h1>
-      <div style={{ marginBottom: '10px' }}>
+      <div  style={{ marginBottom: '10px', textAlign: 'center' }}>
         <button onClick={zoomIn}>Zoom In</button>
         <button onClick={zoomOut}>Zoom Out</button>
         <button onClick={resetView}>Reset View</button>
