@@ -73,7 +73,7 @@ const MarkmapPage = () => {
       const { root } = transformer.transform(markdown);
 
       // Create the Markmap and pass the SVG element
-      const markmap = Markmap.create(svgRef.current, {
+      Markmap.create(svgRef.current, {
         colorFreezeLevel: 2,
         collapsed: false,
         nodeMinHeight: 30,
