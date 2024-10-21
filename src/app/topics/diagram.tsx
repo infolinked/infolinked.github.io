@@ -6,49 +6,11 @@ import { Markmap } from 'markmap-view';
 import { transformer } from '../markmap';
 import { Toolbar } from 'markmap-toolbar';
 import 'markmap-toolbar/dist/style.css';
+import useHandleError from "../hooks/use-handle-error";
 
 
 
 
-const initValue = `
-# Sample code 
-
-## Links
-
-- [Website](https://markmap.js.org/)
-- [GitHub](https://github.com/gera2ld/markmap)
-
-## Related Projects
-
-- [coc-markmap](https://github.com/gera2ld/coc-markmap) for Neovim
-- [markmap-vscode](https://marketplace.visualstudio.com/items?itemName=gera2ld.markmap-vscode) for VSCode
-- [eaf-markmap](https://github.com/emacs-eaf/eaf-markmap) for Emacs
-
-## Features
-
-Note that if blocks and lists appear at the same level, the lists will be ignored.
-
-### Lists
-
-- **strong** ~~del~~ *italic* ==highlight==
-
-- [x] checkbox
-- Katex: $x = {-b \pm \sqrt{b^2-4ac} \over 2a}$ <!-- markmap: fold -->
-  - [More Katex Examples](#?d=gist:af76a4c245b302206b16aec503dbe07b:katex.md)
-- Now we can wrap very very very very long text based on maxWidth option
-- Ordered list
-  1. item 1
-  2. item 2
-
-### Blocks
-
-| Products | Price |
-|-|-|
-| Apple | 4 |
-| Banana | 2 |
-
-![](/favicon.png)
-`;
 
 
 function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
@@ -67,15 +29,27 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
   }
 }
 
-const fetchInitValue = async (topic: string) => {
-  debugger;
-  // Simulate fetching from an API or file
-  const response = await fetch(`https://raw.githubusercontent.com/aungthuoo/apis/refs/heads/main/mindmaps/${topic}/index.md`); // Replace with your actual API endpoint
-  const data = await response.text(); // Assuming the API returns plain text (markdown content)
-  debugger; 
-  return data;
-};
 
+const initValue = `
+# Sample code 
+
+## Features
+
+Note that if blocks and lists appear at the same level, the lists will be ignored.
+
+### Lists
+
+- **strong** ~~del~~ *italic* ==highlight==
+
+- [x] checkbox
+- Katex: $x = {-b \pm \sqrt{b^2-4ac} \over 2a}$ <!-- markmap: fold -->
+  - [More Katex Examples](#?d=gist:af76a4c245b302206b16aec503dbe07b:katex.md)
+- Now we can wrap very very very very long text based on maxWidth option
+- Ordered list
+  1. item 1
+  2. item 2
+
+`;
 export default function Diagram() {
   const searchParams = useSearchParams(); // Safely used in client component
   const of = searchParams.get("of"); // Get 'username' from query string
@@ -85,7 +59,7 @@ export default function Diagram() {
   const refSvg = useRef<SVGSVGElement | null>(null);
   const refMm = useRef<Markmap>();
   const refToolbar = useRef<HTMLDivElement | null>(null);
-
+  const { error, handleError, clearError } = useHandleError();
   // const loadData = async () => {
   //   try {
   //     setData([]); // Replace with actual data loading logic
@@ -95,6 +69,25 @@ export default function Diagram() {
   // };
 
 
+
+  const fetchInitValue = async (topic: string) => {
+    try{
+      debugger; 
+      // Simulate fetching from an API or file
+      const response = await fetch(`https://raw.githubusercontent.com/aungthuoo/apis/refs/heads/main/mindmaps/${topic}/index.md`); // Replace with your actual API endpoint
+
+      if(response.status != 200) throw new Error("Something went wrong!"); 
+
+      const data = await response.text(); // Assuming the API returns plain text (markdown content)
+      return data;
+      // throw new Error("Something went wrong!"); 
+    }catch(error){
+      if (error instanceof Error) {
+        handleError(error); // Handle the error using the custom hook
+      }
+    }
+    
+  };
   
   useEffect(() => {
     if (refMm.current) return;
@@ -118,7 +111,7 @@ export default function Diagram() {
     debugger; 
     const fetchData = async () => {
       const fetchedValue = await fetchInitValue(of || '');
-      setValue(fetchedValue);
+      setValue(fetchedValue || '');
     };
     fetchData();
 
@@ -142,7 +135,18 @@ export default function Diagram() {
         </h1>
       </div>
 
-      <div className="m-auto">
+      {error && (
+        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700">
+          <p>Error: {error.message}</p>
+          <button onClick={clearError} className="mt-2 p-1 bg-red-500 text-white">
+            Clear Error
+          </button>
+        </div>
+      )}
+
+
+
+      <div className="m-auto overflow-hidden">
         
         <div className="flex-container">
           <svg className="flex-svg" ref={refSvg} />
