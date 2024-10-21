@@ -7,7 +7,7 @@ import useHandleError from "@/app/hooks/use-handle-error";
 import OpenToWorkComponent from "@/components/open-to-work-component";
 import ReactMarkdown, { Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { github } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Change this line
+import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Change this line
 import styled, { createGlobalStyle } from 'styled-components';
 
 interface GistFile {
@@ -167,7 +167,7 @@ export default function BlogItem() {
                         const match = /language-(\w+)/.exec(className || '');
                         return !inline && match ? (
                           <SyntaxHighlighter
-                            style={github} // Ensure this is set correctly
+                            style={solarizedlight} // Ensure this is set correctly
                             language={match[1]}
                             PreTag="div"
                             {...props}
