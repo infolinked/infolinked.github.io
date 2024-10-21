@@ -1,53 +1,5 @@
 'use client'
-/*
-  import { useTransitionRouter } from "next-view-transitions";
-  import { useSearchParams } from "next/navigation";
-  import { useState } from "react";
-  import { usePathname } from 'next/navigation'
-  import { ChevronLeftIcon } from "@radix-ui/react-icons";
 
-
-  export default function Navbar() {
-      const searchParams = useSearchParams();
-      const [search, setSearch] = useState(searchParams.get("q") ?? '');
-      const router = useTransitionRouter();
-      const pathname = usePathname()
-
-      const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === 'Enter') {
-              router.push(`/topics?of=${search}`)
-          }
-      }
-
-
-      return (
-          <>
-            <div className="flex items-center justify-between h-20 border-b border-gray-300 shadow-md px-5 space-x-1">
-                <div>
-                    {pathname !== '/' &&
-                        <button onClick={() => router.back()}>
-                            <ChevronLeftIcon />
-                            <span className="hidden sm:block">Go Back</span>
-                        </button>}
-                </div>
-
-                <div className="flex flex-grow max-w-3xl space-x-1">
-                    <input value={search} type="Search" placeholder="Search User" onChange={(e) => setSearch(e.target.value)} onKeyDown={handleKeyDown} />
-
-                    <div>
-
-                    </div>
-                    <button onClick={() => router.push(`/topics?of=${search}`)} >Search</button>
-                </div>
-
-                <div></div>
-            </div>
-          </>
-      )
-  } 
-      */
-
-  // components/Navbar.tsx
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useTransitionRouter } from "next-view-transitions";
@@ -81,7 +33,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center">
         
         <Link href="/" className="flex items-center text-white text-lg font-bold">
-          <Image src={'/static/images/logos/softwarezay.png'} alt="no-data" width={30} height={30} className="mx-3"/>
+          <Image src={'/static/images/logos/softwarezay.png'} alt="no-data" width={40} height={40} className="mx-3 max-w-full h-auto rounded-full  bg-gray-100 p-1"/>
           <span className="hidden md:block">InfoLinked</span>
         </Link>
 
@@ -94,8 +46,8 @@ const Navbar: React.FC = () => {
 
 
         <div className="hidden md:flex space-x-4">
-          <Link href="/" className="text-gray-300 hover:text-white">Home</Link>
-          <Link href="/about" className="text-gray-300 hover:text-white">About</Link>
+          <Link href="/products" className="text-gray-300 hover:text-white">Home</Link>
+          <Link href="/blogs" className="text-gray-300 hover:text-white">About</Link>
           <Link href="/services" className="text-gray-300 hover:text-white">Services</Link>
           <Link href="/contact" className="text-gray-300 hover:text-white">Contact</Link>
         </div>

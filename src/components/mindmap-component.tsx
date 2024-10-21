@@ -8,12 +8,12 @@ interface ChildComponentProps {
   blog: Blog;
 }
 
-const BlogComponent: React.VFC<ChildComponentProps> = ({ blog }) => {
+const MindMapComponent: React.VFC<ChildComponentProps> = ({ blog }) => {
   return (
     <article className="bg-white dark:bg-gray-900 dark:text-white mb-4 break-inside break-inside-avoid p-6 rounded-xl bg-white flex flex-col bg-clip-border max-w-md">
       <div className="flex items-center justify-between">
         <div className="flex">
-          <a className="inline-block mr-4" href={`topics/${blog.slug}`}>
+          <a className="inline-block mr-4" href={`/topics?of=${blog.slug}`}>
             <Image src={blog.author.image} alt="" width={60} height={60} className="max-w-full h-auto rounded-full  bg-gray-100"/>
           </a>
           <div className="flex flex-col">
@@ -34,7 +34,7 @@ const BlogComponent: React.VFC<ChildComponentProps> = ({ blog }) => {
 
       <div className="grid grid-cols-1 gap-1 content-stretch py-4">
         {blog.images.map((image, index) => (
-          <a className="flex" href={`topics/${blog.slug}`}  key={index}>
+          <a className="flex" href={`/topics?of=${blog.slug}`}  key={index}>
               <Image src={`${blog.site}${blog.slug}/${image}`} alt="" width={250} height={250} className="object-cover object-cover w-full"/>
           </a>
         ))}
@@ -62,7 +62,7 @@ const BlogComponent: React.VFC<ChildComponentProps> = ({ blog }) => {
       <div className="pt-6">
         <div className="w-full">
           <Link
-            href="/topics/${blog.slug}"
+            href={`/topics?of=${blog.slug}`}
             target="_blank"
             className="dark:bg-gray-700 dark:text-white py-3 px-4 w-full block bg-slate-100 text-center rounded-lg font-medium hover:bg-slate-200 transition ease-in-out delay-75 cursor-pointer"
           >
@@ -73,4 +73,4 @@ const BlogComponent: React.VFC<ChildComponentProps> = ({ blog }) => {
     </article>
   );
 };
-export default BlogComponent;
+export default MindMapComponent;
