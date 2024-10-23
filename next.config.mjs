@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: 'export', 
+  // output: "standalone",
+  trailingSlash: true, // When exporting a static site, using the trailingSlash option ensures that every route gets a .html file
   // images: {
   //   domains: ['raw.githubusercontent.com'],
   // },
+
   images: {
+    unoptimized: true, // Disable Next.js optimized images for static exports
     remotePatterns: [
       {
         protocol: 'https',
@@ -14,6 +18,8 @@ const nextConfig = {
       },
     ],
   },
+  // Add assetPrefix if deploying to a subpath like GitHub Pages
+  //assetPrefix: './',
   
 };
 
